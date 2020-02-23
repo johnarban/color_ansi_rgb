@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 import re
 import itertools
+from matplotlib.colors as mc
 
+# copyied from this guy. thanks guy!!
+# https://github.com/mgzme/color_ansi_rgb
 
 class ColorANSIRGB:
     def __init__(self):
@@ -112,6 +115,19 @@ class ColorANSIRGB:
     def rgb(self, fg, bg=None, style=None):
         ansi_string = self.rgb_to_ansi(fg, bg)
         return self.reset() + self.style(style) + ansi_string
+    
+    def mpl(self, fg, bg = None, style=None):
+        if mc.is_color_like(fg):
+            fg = mc.to_hex(fg)
+        else:
+            fg = '#FFFF00'
+        if bg is not None:
+            if mc.is_color_like(bg):
+                bg = mc.to_hex(bg)
+            else:
+                bg = '#000000'
+        ansi_string  = self.rgb_to_ansi(fg, bg)
+        return self.reset() + self.style(style) + ansi_string
 
     def ansi(self, ansi_fg, ansi_bg=None, style=None):
         style = self.style(style) if style else ""
@@ -121,41 +137,40 @@ class ColorANSIRGB:
             return self.reset() + style + "%s%s" % (_bg, _fg)
         return self.reset() + style + _fg
 
-
-color = ColorANSIRGB()
-
-red = color.rgb('FF0000')
-red_2 = color.rgb('AF0000')
-red_3 = color.rgb('5F0000')
-green = color.rgb('00FF00')
-green_2 = color.rgb('00AF00')
-green_3 = color.rgb('005F00', style='underline')
-blue = color.rgb('00D7FF')
-blue_2 = color.rgb('0087FF', style='bold')
-blue_3 = color.rgb('005FAF')
-cyan = color.rgb('AFFFFF')
-cyan_2 = color.rgb('87FFFF')
-cyan_3 = color.rgb('1F9999', style='underline')
-purple = color.rgb('AF5FFF')
-purple_2 = color.rgb('AF00AF')
-purple_3 = color.rgb('87005F')
-yellow = color.rgb('D7FF00')
-yellow_2 = color.rgb('D7AF00')
-yellow_3 = color.rgb('D75F00')
-orange = color.rgb('FF8700')
-orange_2 = color.rgb('FF5F00', style=1)
-orange_3 = color.rgb('875F00')
-white = color.rgb('FFFFFF')
-black = color.rgb('000000')
-grey = color.rgb('A8A8A8')
-grey_2 = color.rgb('6C6C6C')
-grey_3 = color.rgb('444444')
-grey_4 = color.rgb('303030', style='dim')
-
-reset = color.reset()
-
-
 def demo():
+    color = ColorANSIRGB()
+
+    red = color.rgb('FF0000')
+    red_2 = color.rgb('AF0000')
+    red_3 = color.rgb('5F0000')
+    green = color.rgb('00FF00')
+    green_2 = color.rgb('00AF00')
+    green_3 = color.rgb('005F00', style='underline')
+    blue = color.rgb('00D7FF')
+    blue_2 = color.rgb('0087FF', style='bold')
+    blue_3 = color.rgb('005FAF')
+    cyan = color.rgb('AFFFFF')
+    cyan_2 = color.rgb('87FFFF')
+    cyan_3 = color.rgb('1F9999', style='underline')
+    purple = color.rgb('AF5FFF')
+    purple_2 = color.rgb('AF00AF')
+    purple_3 = color.rgb('87005F')
+    yellow = color.rgb('D7FF00')
+    yellow_2 = color.rgb('D7AF00')
+    yellow_3 = color.rgb('D75F00')
+    orange = color.rgb('FF8700')
+    orange_2 = color.rgb('FF5F00', style=1)
+    orange_3 = color.rgb('875F00')
+    white = color.rgb('FFFFFF')
+    black = color.rgb('000000')
+    grey = color.rgb('A8A8A8')
+    grey_2 = color.rgb('6C6C6C')
+    grey_3 = color.rgb('444444')
+    grey_4 = color.rgb('303030', style='dim')
+
+    reset = color.reset()
+
+
     print(white + "Using predefined color to print White color text")
     print(blue_2 + "Using predefined color to print Blue color text")
     print(color.rgb("#FFFF55", "#000088") + "Using RGB hex values to print Yellow text on blue background" + reset)
